@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -10,7 +11,7 @@
         </div>
         <div class="row welcomeabout">
         	<div class="col-sm-8 center-block">
-        		<img src="http://blog.germinationstudio.com/storage/images/548202f54b1f89ef2a705028232ccd0e.png" class="img-responsive img-thumbnail" alt="">
+        		<img src="/storage/images/548202f54b1f89ef2a705028232ccd0e.png" class="img-responsive img-thumbnail" alt="">
         	</div>
             <div class="col-sm-4">
                 TikiLog is a simple expense logger that allows you to share with a team. 
