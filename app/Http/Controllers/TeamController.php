@@ -21,38 +21,38 @@ class TeamController extends Controller
 
 public function __construct()
 {
+    parent::__construct();  
 	$this->middleware('auth');
 }
 	
  public function create()
  {
  	if(!Auth::check()) {
-                return redirect('/login')
-                    ->with('error', 'You must be logged in!');
-            }
+        return redirect('/login')
+            ->with('error', 'You must be logged in!');
+    }
  }
 
  public function changeName(Team $team, Request $request)
  {
  	if(!Auth::check()) {
-                return redirect('/login')
-                    ->with('error', 'You must be logged in!');
-            }
+        return redirect('/login')
+            ->with('error', 'You must be logged in!');
+        }
     if(!Auth::user()->team->owner) {
-                return redirect('/login')
-                    ->with('error', 'You must be logged in!');
+            return redirect('/login')
+                ->with('error', 'You are not authorized to change that!');
             }
 
-            $this->validate($request, [
-        		'teamName' => 'required|max:255'
-            	]);
+    $this->validate($request, [
+		'teamName' => 'required|max:255'
+    	]);
 
-            $team->name = $request->teamName;
-            $team->save();
+    $team->name = $request->teamName;
+    $team->save();
 
-            return redirect(route('settings.team'))
-            ->with('success', 'Your team name has been changed.');
-
+    return redirect(route('settings.team'))
+    ->with('success', 'Your team name has been changed.');
  }
 
  public function sendInvite()
@@ -74,19 +74,23 @@ public function __construct()
  	$team = Auth::user()->team;
  	$existingUser = User::where('email', $request->email)->first();
  	$existingInvite = Invite::where('email', $request->email)->where('team_id', $team->id)->first();
-
  	if ($existingUser) {
- 		if(!$team->users->contains($existingUser->id))
+ 		if(!$existingUser->isOnTeam($team->id))
  		{
- 			// TODO: Send Email
- 			// $team->users()->attach($existingUser);
- 			// TODO redirect user to prevent invite from being created. 
+            $invite = New Invite;
+            $invite->user_id = Auth::user()->id;
+            $invite->team_id = $team->id;
+            $invite->email = $request->email;
+            $invite->token = str_random(12);
+            $invite->save();
+            Mail::to($invite->email)->send(new TeamInvite($invite));
+            return redirect()->back()->with('success', 'Your invite has been sent.');
  		}
- 		// TODO: email this user to let them know they've been added.
+        return redirect()->back()->with('info', "That user is already on your team.");
  	}
 
  	if ($existingInvite) {
- 		// TODO: resend Invite, warn previously invited.
+        Mail::to($existingInvite->email)->send(new TeamInvite($existingInvite));
  		return redirect()->back()->with('info', "You have already invited that user, we resent the invitation.");
  	}
 
@@ -112,11 +116,11 @@ public function __construct()
 
 	$invite = Invite::where('token', $token)->first();
 
-    // if($invite->email != Auth::user()->email)
-    // {
-    //     return redirect(route('home'))
-    //     ->with('error', 'The invitation to join this team does not match your credentials.');
-    // }
+    if($invite->email != Auth::user()->email)
+    {
+        return redirect(route('home'))
+            ->with('info', 'The invitation to join this team does not match your credentials.');
+    }
 
 	if(!$invite)
 	{
@@ -132,64 +136,68 @@ public function __construct()
             ->with('warning', 'You are already on that team.');
     }
         
-	   $team->users()->attach(Auth::user()->id);
- 		Mail::to($invite->team->owner->email)->send(new JoinedTeam($invite));
- 		Log::info('User '.$invite->email.' has accepted an invitation to team '.$team->id);	
- 		$invite->delete();
- 		
- 		return redirect(route('settings.team'))
- 			->with('success', 'You have joined that team!');
+    $team->users()->attach(Auth::user()->id);
+	Mail::to($invite->team->owner->email)->send(new JoinedTeam($invite));
+	Log::info('User '.$invite->email.' has accepted an invitation to team '.$team->id);	
+	$invite->delete();
+	return redirect(route('settings.team'))
+		->with('success', 'You have joined that team!');
 }
 
 public function remove(User $user)
 {
-// CHECKED ROUTE:: Won't allow me to change anything, however, it does give me a success message claiming I removed a user, even though I hadn't! 
-
 	if(!Auth::check()) {
-                return redirect('/login')
-                    ->with('error', 'You must be logged in!');
-            } 
+        return redirect('/login')
+            ->with('error', 'You must be logged in!');
+    } 
             
     $team = Auth::user()->team;
     $team->users()->detach($user->id);
-
-
- 		return redirect(route('settings.team'))
- 			->with('success', 'You have removed that user.');
-
+    if(!$user->isOnTeam($team->id)){
+        return redirect()->back()
+            ->with('info', 'That user was not on your team.');
+    }
+	return redirect(route('settings.team'))
+		->with('success', 'You have removed that user.');
 }
 
 public function leave($id)
 {
-// CHECKED ROUTE:: Is not allowing fuckery due to the $user being set to Auth, is this enough or should I add some sort of extra permissions?
-
 	if(!Auth::check()) {
-                return redirect('/login')
-                    ->with('error', 'You must be logged in!');
-            }
+        return redirect('/login')
+            ->with('error', 'You must be logged in!');
+    }
 	$team = Team::find($id);
 	$user = Auth::user();
-	$team->users()->detach($user->id);
-	return redirect(route('settings.team'))
- 			->with('success', 'You have left the team.');
+    if(!$user->isOnTeam($team->id)){
+	    return redirect()->back()
+        ->with('error', 'You cannot leave a team you are not on.'); 
+       }
+    $team->users()->detach($user->id);
+        return redirect(route('settings.team'))
+            ->with('success', 'You have left the team.');
 }
 
 public function deleteInvite($id)
 {
-// CHECKED AND SECURE 
-
 	$invite = Invite::find($id);
 	if($invite->user_id != Auth::user()->id){
 		return redirect(route('dashboard', Auth::user()->team))
-	        		->with('error', 'You cannot edit that invitation.');
+    		->with('error', 'You cannot edit that invitation.');
 	}
-
 	$invite->delete();
-
 	return redirect(route('settings.team'))
- 			->with('success', 'You have cancelled the invitation.');
+		->with('success', 'You have cancelled the invitation.');
 } 
 
+public function denyInvite(Invite $invite)
+{
+    if(Auth::user()->email = $invite->email){
+        $invite->delete();
+        return redirect()->back()
+            ->with('info', 'That invitation has been denied.');
+    }
+}
 
 
 }

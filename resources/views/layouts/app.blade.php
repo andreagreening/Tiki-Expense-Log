@@ -7,21 +7,14 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="https://use.fontawesome.com/d1c70cae44.js"></script>
-  {{-- datetimepicker --}}
-{{--   <script type="text/javascript" src="/path/to/jquery.js"></script>
-<script type="text/javascript" src="/path/to/moment.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap/js/transition.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap/js/collapse.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap/dist/bootstrap.min.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap-datetimepicker.min.js"></script> --}}
-
-
+ 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/helpers.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
@@ -67,9 +60,6 @@
                             <li><a href="{{ route('registerDemo')}}">LIKE THE APP? JOIN US!</a></li>
                         @else
                         <li><a href="{{ route('settings.team')}}"><i class="fa fa-users padding-right-5"></i>
-                        {{-- @if(!Auth::user()->invites->isEmpty())
-                            <span class="badge">{{ count(Auth::user()->invites())}}</span>
-                        @endif --}}
                         Teams</a></li>
                         
                         <li role="presentation" class="dropdown"><a href="#" data-toggle="dropdown" role="button" aira-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-cog"></i></a>

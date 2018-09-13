@@ -11,7 +11,6 @@ use Carbon\Carbon;
 
 class CategoryController extends Controller
 {
-
 	public function store(Request $request, Team $team)
 	{
 		$this->validate($request, [
@@ -32,28 +31,28 @@ class CategoryController extends Controller
 
 	public function edit(Category $category)
 	{
-		if(!Auth::check()) {
-                return redirect('/login')
-                    ->with('error', 'You must be logged in!');
-            }
+		if(!Auth::check()) 
+		{
+	  		return redirect('/login')
+	            ->with('error', 'You must be logged in!');
+        }
 
-         $teamId = $category->team_id;
-        
+        $teamId = $category->team_id;
+     
         if(!Auth::user()->isOnTeam($teamId))
         {
         	return redirect(route('dashboard', Auth::user()->team))
-	        		->with('error', 'You do not have permission to edit that category.');
+        		->with('error', 'You do not have permission to edit that category.');
         }    
 
-           $categories = Category::where('team_id', '=', $teamId) ->orderBy('title', 'asc')
-           		->noSubCats()
-           		->where('id', '!=', $category->id)
-           		->get();
+       $categories = Category::where('team_id', '=', $teamId) ->orderBy('title', 'asc')
+       		->noSubCats()
+       		->where('id', '!=', $category->id)
+       		->get();
 	
 		return view('categories.edit')
 			->with('category', $category)
 			->with('categories', $categories);
-
 	}
 
 	public function update(Request $request, Category $category)
@@ -66,30 +65,30 @@ class CategoryController extends Controller
 		$category->slug = str_slug($request->title);
 		$category->save();
 
-		// dd($category);
 		return redirect(route('home'))
 			->with('success', 'Your Category has been updated.');
 	}
 
 	public function viewBy(Request $request, Category $category)
 	{
-		if(!Auth::check()) {
-                return redirect('/login')
-                    ->with('error', 'You must be logged in!');
-            }
+		if(!Auth::check()) 
+		{
+	        return redirect('/login')
+	            ->with('error', 'You must be logged in!');
+        }
 
         $teamId = $category->team_id;
         
         if(!Auth::user()->isOnTeam($teamId))
         {
         	return redirect(route('dashboard', Auth::user()->team))
-	        		->with('error', 'You do not have permission to view that category.');
+        		->with('error', 'You do not have permission to view that category.');
         }    
      	
         $transactions = Transaction::whereIn('category_id', $category->getSubCatIds($category->id))
-        		->filter($request->all())
-        		->orderBy('date', 'desc')
-        		->get();
+    		->filter($request->all())
+    		->orderBy('date', 'desc')
+    		->get();
 
         $transactionSum = $transactions->sum('amount');
 

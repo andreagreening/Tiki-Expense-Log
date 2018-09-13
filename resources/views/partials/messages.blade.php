@@ -1,7 +1,7 @@
 
 
 
-@if (count($errors) > 0)
+@if (isset($errors) && $errors->any())
 <div class="container">
     <div class="alert alert-danger">
         <ul>

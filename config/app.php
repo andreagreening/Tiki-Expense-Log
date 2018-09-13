@@ -232,6 +232,7 @@ return [
         'Team' => \App\Team::class,
         'User' => \App\User::class,
         'Invite' => \App\Invite::class,
+        'Hit' => \App\Hit::class,
 
     ],
 

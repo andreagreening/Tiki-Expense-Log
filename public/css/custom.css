@@ -80,7 +80,6 @@ a {
 }
 
 
-
 /*Fonts*/
 
 .heading-font {
@@ -113,17 +112,22 @@ a {
 
 /*BUTTON COLORS*/
 
-.btn-danger {
-	background-color: #F45846;
+
+
+
+.custom-danger {
+	color: #F45846;
 }
 
-.btn-warning {
-	background-color: #FFDC42;
+.custom-info {
+ color: #41bfed;
 }
 
+.custom-success {
+	color: #2cc185;
+}
 .welcome {
 	margin-top: 100px;
-
 }
 
 .welcomeabout {
@@ -134,5 +138,4 @@ a {
 .gradient {
 	  background: linear-gradient(to right, #359EAD
  , #D4F2E6);
-
 }

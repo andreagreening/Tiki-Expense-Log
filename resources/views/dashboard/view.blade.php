@@ -3,22 +3,19 @@
 @section('content')
 <div class="container">
     <div class="row">
-    
         <div class="col-sm-5 col-sm-offset-0 col-xs-10 col-xs-offset-1">
         {{-- Add Transaction Collapsed Panel --}}
             <div class="visible-xs">
                   @include('transactions.addTransaction', ['addTransactionId' => 'addTransaction1'])
                  @include('categories.addCategory', ['addCategoryId' => 'addCategory1'])
-                 {{-- @include('categories.manage', ['categoryManagerId' => 'categoryManager1']) --}}
             </div>
             <div class="panel-group"> 
                 <div class="panel panel-default border-primary padding-bottom-20 padding-top-15 no-radius">
                     <h1 class="text-center">{{ $team->name ?: $team->owner->name }}</h1>
                 </div>
                 {{-- end of panel --}}
-               
-                @if(!$teamsList->isEmpty())
                 {{-- Toggle Between Team Trackers --}}
+                @if(!$teamsList->isEmpty())
                 <div class="panel panel-default side-border-primary text-center no-radius">
                     <div class="btn-group">
                         <div class="panel-heading center-block">
@@ -36,10 +33,9 @@
                         </div>
                     </div>
                 </div>
-                @endif
-                 
+                @endif  
                 {{-- end of panel --}}
-                </div>
+            </div>
         
                @include('partials.total')
                @include('dashboard.filterBy')
@@ -47,7 +43,7 @@
                     @include('partials.categoryChart') 
                @endif
                 @include('categories.manage', ['categoryManagerId' => 'categoryManager2'])
-            </div>
+        </div>
       
         {{-- Add Transaction for Larger Screens --}}
         <div class="col-sm-7 col-sm-offset-0 col-xs-10 col-xs-offset-1">
@@ -55,15 +51,13 @@
                 @include('transactions.addTransaction', ['addTransactionId' => 'addTransaction2'])
                  {{-- Add Category --}}
                 @include('categories.addCategory', ['addCategoryId' => 'addCategory2'])
-
             </div>
             <div class="panel panel-default border-primary" id="recentTransactions">
                 <div class="panel-heading heading-font">
                     Recent Transactions
                     @if(Request::has('startdate'))
                         {{ Request::get('startdate') }} - {{ Request::get('enddate') }}
-                    @endif    
-                   
+                    @endif            
                 </div>
 
                 @if(!$transactions->isEmpty())

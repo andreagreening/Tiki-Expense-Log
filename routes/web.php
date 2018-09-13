@@ -18,10 +18,6 @@ Route::get('demo/register', 'HomeController@registerDemo')->name('registerDemo')
 // 
 Auth::routes();
 Route::get('admin/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-
-Route::get('/home', function(){
-	return redirect(route('dashboard', Auth::user()->team->id));
-});
 Route::get('/dashboard', function(){
 	return redirect(route('dashboard', Auth::user()->team->id));
 })->name('home');
@@ -61,10 +57,12 @@ Route::post('/team/{team}/changename', 'TeamController@changeName')->name('team.
 Route::get('team/invite', 'TeamController@sendInvite')->name('team.sendInvite');
 Route::get('team/invite/sent', 'TeamController@sent')->name('team.inviteSent');
 Route::get('team/invite/accept/{token}', 'TeamController@acceptInvite')->name('team.acceptInvite');
+Route::get('team/{invite}/deny', 'TeamController@denyInvite')->name('team.denyInvite');
 Route::get('team/{team}/view', 'TeamController@view')->name('team.view');
 Route::get('team/remove/{user}', 'TeamController@remove')->name('team.removeUser');
 Route::get('team/{id}/leave', 'TeamController@leave')->name('team.leave');
 Route::get('invite/{id}/delete', 'TeamController@deleteInvite')->name('team.deleteInvite');
+
 
 // DASHBOARD
 Route::get('dashboard/{team}', 'DashboardController@index')->name('dashboard');

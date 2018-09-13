@@ -58,7 +58,8 @@ class User extends Authenticatable
         return $this->hasMany('Invite');
    }
 
-   public function isOnTeam($teamId){
+   public function isOnTeam($teamId)
+   {
     $team = Team::find($teamId);
     if(!$team) return false;
     if($team->users->isEmpty()) return false;
@@ -84,11 +85,6 @@ class User extends Authenticatable
     */
    public function deleteUserAndAllData()
    {
-        //  TODO: Delete Team, Account, Cats, Transactions, user_account, etc
-        //  Log::info('Deleting User ID: ' . $this->id);
-        // $this->account->delete()
-        // $this->transactions()->delete()
-
         $this->categories()->delete();
         $this->transactions()->delete();
         $this->team->users()->detach($this->id);
