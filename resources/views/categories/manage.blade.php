@@ -11,11 +11,11 @@
  			<ul style="list-style-type:none">
 				@foreach($categories as $category)
 					<li>
-						 <span class="bold"><a href="{{ route('category.viewBy', $category) }}">{{ $category->title }}</a></span>  <a class="pull-right" href="{{ route('category.edit', $category) }}">Edit</a>
+						 <span class="bold"><a href="{{ route('dashboard', [$team, 'category_id' => $category->id] + Request::all()) }}">{{ $category->title }}</a></span>  <a class="pull-right" href="{{ route('category.edit', $category) }}">Edit</a>
 						@if($category->subcategories)
 							<ul>
 							@foreach($category->subcategories as $subcategory)
-							<li class=><i class="fa fa-ellipsis-h-alt"></i><span class="bold"><a href="{{ route('category.viewBy', $subcategory) }}">{{ $subcategory->title }}</a></span>
+							<li class=><i class="fa fa-ellipsis-h-alt"></i><span class="bold"><a href="{{ route('dashboard', [$team, 'category_id' => $subcategory->id] + Request::all()) }}">{{ $subcategory->title }}</a></span>
 							<a href="{{ route('category.edit', $subcategory) }}" class="pull-right">Edit</a></li>
 							@endforeach
 							</ul>

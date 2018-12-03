@@ -28,17 +28,17 @@
             </div>
             <div class="form-group {{ $errors->has('amount')? 'has-error' : "" }}">
                 <label class="control-label" for="amount">Amount</label>
-                <input type="text" name="amount" class="form-control" value="{{ old('amount') ? old('amount') : "" }}">
+                <input type="number" name="amount" class="form-control" value="{{ old('amount') ? old('amount') : "" }}" placeholder="$123.45">
             </div>
             <div class="form-group {{ $errors->has('category')? 'has-error' : "" }}">
                 <label class="control-label" for="category">Select a Category</label>
                 <select name="category_id" class="form-control">
                     <option value=""> </option>
                     @foreach($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->title }}
+                        <option value="{{ $category->id }}"  {{ old('category_id') == $category->id ? 'selected' : "" }}>{{ $category->title }}
                             @if($category->subcategories)
                                 @foreach($category->subcategories as $subcategory)
-                                    <option value="{{ $subcategory->id }}">-{{ $subcategory->title }}</option>
+                                    <option value="{{ $subcategory->id }}"{{ old('category_id') == $subcategory->id ? 'selected' : "" }}>{{ $subcategory->title }}</option>  
                               @endforeach
                             @endif
                         </option>

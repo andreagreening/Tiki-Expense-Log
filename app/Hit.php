@@ -10,7 +10,7 @@ class Hit extends Model
     public static function log(){
     	//	Ignore admin
     	$ip = Request::ip();
-    	// if($ip == '47.35.110.40') return; UNCOMMENT LATER
+    	if($ip == '47.35.110.40') return;
     	$hit = New Hit;
     	$hit->ip = $ip;
     	$hit->user_agent = implode(Request::header()['user-agent']);

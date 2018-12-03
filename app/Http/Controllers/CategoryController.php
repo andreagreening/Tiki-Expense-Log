@@ -13,6 +13,7 @@ class CategoryController extends Controller
 {
 	public function store(Request $request, Team $team)
 	{
+
 		$this->validate($request, [
 			'title' => 'required|max:225',
 			]);
@@ -65,58 +66,13 @@ class CategoryController extends Controller
 		$category->slug = str_slug($request->title);
 		$category->save();
 
-		return redirect(route('home'))
+		$teamId = $category->team;
+
+		return redirect(route('dashboard', $teamId))
 			->with('success', 'Your Category has been updated.');
 	}
 
-	public function viewBy(Request $request, Category $category)
-	{
-		if(!Auth::check()) 
-		{
-	        return redirect('/login')
-	            ->with('error', 'You must be logged in!');
-        }
 
-        $teamId = $category->team_id;
-        
-        if(!Auth::user()->isOnTeam($teamId))
-        {
-        	return redirect(route('dashboard', Auth::user()->team))
-        		->with('error', 'You do not have permission to view that category.');
-        }    
-     	
-        $transactions = Transaction::whereIn('category_id', $category->getSubCatIds($category->id))
-    		->filter($request->all())
-    		->orderBy('date', 'desc')
-    		->get();
-
-        $transactionSum = $transactions->sum('amount');
-
-		$cats = Category::whereIn('id', $category->getSubCatIds($category->id))
-        		->orderBy('title', 'desc')
-        		->get();
-       
-		return view('categories.viewBy')
-			->with('transactions', $transactions)
-			->with('transactionSum', $transactionSum)
-			->with('category', $category)
-			->with('cats', $cats);
-			// ->with('subCategoryTotals', $subCategoryTotals);
-	}
-
-	public function uncategorized()
-	{
-		if(!Auth::check()) {
-                return redirect('/login')
-                    ->with('error', 'You must be logged in!');
-            }
-		$userId = Auth::user()->id;            
-
-		$transactions = Transaction::where('user_id', '=', $userId)->where('category_id', '=', NULL)->orderBy('date', 'desc')->get();
-
-		return view('categories.uncategorized')
-			->with('transactions', $transactions);
-	}
 
 	public function confirmDelete(Category $category)
 	{

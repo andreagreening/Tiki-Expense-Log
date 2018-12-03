@@ -199,5 +199,22 @@ public function denyInvite(Invite $invite)
     }
 }
 
+public function default($id)
+{
+    $user = Auth::user();
+    if(! $user->isOnTeam($id))
+    {
+        return redirect(route('settings.team'))
+            ->with('error', 'You are not on that team.');
+    }
+
+    $user->default_team_id = $id;
+    $user->save();
+
+    return redirect(route('settings.team'))
+        ->with('success', 'Your default team has been updated.');
+
+}
+
 
 }

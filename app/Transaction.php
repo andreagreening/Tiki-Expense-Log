@@ -34,6 +34,7 @@ class Transaction extends Model
         //  default to mtd
         if(!isset($params['timeframe']))
             $params['timeframe'] = 'mtd';
+        // determine which timeframe to sort by
         if ( isset($params['timeframe']) && trim($params['timeframe']) !== ''){
             switch ($params['timeframe']) {
                 case 'week':
@@ -76,7 +77,26 @@ class Transaction extends Model
             $builder->where('date', '<=', $endDate);   
         }
 
+        if ( isset($params['user_id']) && !empty(trim($params['user_id'])))
+        {
+            $userId = $params['user_id'];
+            // dd($userId);
+
+            $builder->where('user_id', '=', $userId);
+        }
+
+        if ( isset($params['category_id']) && !empty(trim($params['category_id'])))
+        {
+            $categoryId = $params['category_id'];
+            $pCategory = Category::where('id', '=', $categoryId)->get();
+            $sCategories = Category::where('pid', '=', $categoryId)->get();
+            
+            $categoryIds = $sCategories->pluck('id')->toArray();
+            $categoryIds[] = $categoryId;
+            $builder->whereIn('category_id', $categoryIds);
+        }
         // next filter here
+
         return $builder;
     }
 
@@ -136,15 +156,7 @@ class Transaction extends Model
         ['daysAgo' => 44, 'description' => 'Farmers Market', 'amount' => '29', 'categoryTitle' => 'Food and Groceries'],
         ['daysAgo' => 45, 'description' => 'Tires', 'amount' => '275', 'categoryTitle' => 'Automotive/Transportation']
 
-
-        
-
-
-
-
-        
       ];
-   
 
       return $demoTransactions;
     }

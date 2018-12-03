@@ -17,73 +17,47 @@
                       function drawChart() {
                         var data = google.visualization.arrayToDataTable([
                           ['Category', 'Total Spent'],
-                          @foreach($categories as $category)
-                            ['{{ $category->title }}', {{ $category->grandTotal(request()) }}],
-                          @endforeach
+                          @if(Request::get('category_id') && $team->categories()->where('id', Request::get('category_id'))->first() &&  $team->categories()->where('pid', null)->first())
+                            @foreach($categories as $category)
+                              ['{{ $category->title }}', {{ $category->parentCategoryTotal(request()) }}],
+                              @if($category->subcategories())
+                                @foreach($category->subcategories as $subcategory)
+                                ['{{ $subcategory->title }}', {{ $subcategory->subCategoryTotal(request()) }}],
+                                @endforeach
+                              @endif
+                            @endforeach
+                          @else
+                            @foreach($categories as $category)
+                              ['{{ $category->title }}', {{ $category->grandTotal(request()) }}],
+                            @endforeach
+
+                          @endif
                         ]);
 
                         var options = {
                           // title: 'My Daily Activities',
                           pieHole: 0.4,
-                          legend:{position: 'bottom'},
+                          legend:{position: 'right'},
+                          chartArea:{left:15},
                           colors: [
-                          '#1e875d',
-                          '#239a6a',
-                          '#27ad77',
-                          '#2cc185',
-                          '#4b354d',
-                          '#563d58',
-                          '#614563',
-                          '#6c4d6f',
-                          '#ff8800',
-                          '#ff9319',
-                          '#ff9f32'],
-
-
+                          '#ff5a5a',
+                          '#dff48e',
+                          '#5dd495',
+                          '#4cbfe1',
+                          '#3c59c1',
+                          '#ffa7a7',
+                          '#e6acfb',
+                          '#ffde8f',
+                          '#838cff',
+                          '#0084b6',
+                          '#ff6200',
+                          '#ffc000',
+                          '#a0ff00',
+                          '#00eaff',
+                          '#420074'],
                         };
 
                         var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
                         chart.draw(data, options);
                       }
                     </script>
-
-                    
-
-{{-- <script>
-              new Morris.Donut({
-              // ID of the element in which to draw the chart.
-              element: 'categoryChart',
-              // Chart data records -- each entry in this array corresponds to a point on
-              // the chart.
-              data: [
-                { year: '2008', value: 20 },
-                { year: '2009', value: 10 },
-                { year: '2010', value: 5 },
-                { year: '2011', value: 5 },
-                { year: '2012', value: 20 }
-              ],
-              // The name of the data record attribute that contains x-values.
-              xkey: '',
-              // A list of names of data record attributes that contain y-values.
-              ykeys: ['value'],
-              // Labels for the ykeys -- will be displayed when you hover over the
-              // chart.
-              labels: ['Value']
-
-              colors: [
-              //   '#1e875d',
-              //   '#239a6a',
-              //   '#27ad77',
-              //   '#2cc185',
-              //   '#4b354d',
-              //   '#563d58',
-              //   '#614563',
-              //   '#6c4d6f',
-              //   '#ff8800',
-              //   '#ff9319',
-              //   '#ff9f32'
-              // ]
-              
-            });
-            </script> 
-            --}}

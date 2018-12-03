@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-use Transactions;
+use App\Transactions;
 
 class Category extends Model
 {
@@ -137,6 +137,17 @@ class Category extends Model
 
         return $grandTotal;   
     }
+
+   	public function parentCategoryTotal()
+   	{
+   		$request = request();
+    	$parentCategoryTotal = Transaction::where('category_id', $this->id)
+    		->filter($request->all())
+            ->orderBy('date', 'desc')
+            ->sum('amount');
+
+        return $parentCategoryTotal;   
+   	}
 	
     public function link()
     {

@@ -38,10 +38,6 @@ Route::get('category/{category}/edit', 'CategoryController@edit')->name('categor
 Route::post('category/{category}', 'CategoryController@update')->name('category.update');
 Route::get('category/{category}/confirm', 'CategoryController@confirmDelete')->name('category.confirmDelete');
 Route::get('category/{category}', 'CategoryController@delete')->name('category.delete');
-Route::get('category/{category}/view', 'CategoryController@viewBy')->name('category.viewBy');
-Route::get('category/manager', 'CategoryController@manage')->name('category.manage');
-
-Route::get('/uncategorized', 'CategoryController@uncategorized')->name('category.uncategorized');
 
 //SETTINGS
 Route::get('settings', 'SettingsController@index')->name('settings');
@@ -62,6 +58,7 @@ Route::get('team/{team}/view', 'TeamController@view')->name('team.view');
 Route::get('team/remove/{user}', 'TeamController@remove')->name('team.removeUser');
 Route::get('team/{id}/leave', 'TeamController@leave')->name('team.leave');
 Route::get('invite/{id}/delete', 'TeamController@deleteInvite')->name('team.deleteInvite');
+Route::get('team/{teamId}/default', 'TeamController@default')->name('team.default');
 
 
 // DASHBOARD

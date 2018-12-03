@@ -62,7 +62,16 @@
                     <div class="list-group">
                         @foreach($onTeams as $onTeam)
                         <div class="list-group-item">
-                            <a href="{{ route('dashboard', $onTeam->id) }}">{{ $onTeam->owner->name }}</a>
+                            <a href="{{ route('dashboard', $onTeam->id) }}">
+                                @if(!$onTeam->name)
+                                    {{ $onTeam->owner->name }} 
+                                @else
+                                    {{ $onTeam->name }}
+                                @endif
+
+                            </a>
+                            
+                            <a href="{{ route('team.default', $onTeam->id)}}" class="padding-left-15 padding-right-5">Set Default</a>
                             <a href="{{ route('team.leave', $onTeam->id) }}" class="custom-info pull-right">Leave Team</a>
                         </div>
                         @endforeach

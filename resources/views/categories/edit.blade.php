@@ -7,10 +7,9 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					Edit Category 
-					<a href="{{ route('category.confirmDelete', $category) }}" class="btn btn-xs btn-danger pull-right">Delete</a>
 				</div>
 				<div class="panel-body">
-					<form method="POST"  action="{{ route('category.update', $category) }}" >
+					<form method="POST"  action="{{ route('category.update', [$category, $category->team]) }}" >
 						{{ csrf_field() }}
 					<div class="form-group {{ $errors->has('title')? 'has-error' : "" }}">
 						<label class="control-label" for="title">
@@ -31,7 +30,8 @@
 						</select>
 						
 					</div>
-					<input type="submit" class="btn btn-success">
+					<a href="{{ route('category.confirmDelete', $category) }}"><i class="fa fa-trash"></i> Delete Category</a>
+					<input type="submit" class="btn btn-success pull-right">
 					</form>
 				</div>
 			</div>

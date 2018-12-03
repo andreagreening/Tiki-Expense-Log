@@ -24,7 +24,7 @@ class TransactionController extends Controller
     public function store(Request $request, Team $team)
     {
     	$this->validate($request, [
-    		'description' => 'required|max:255',
+    		'description' => 'max:255',
     		'amount' => 'required|numeric|max:10000000',	
             'date' => 'date',
     		]);
@@ -91,7 +91,7 @@ class TransactionController extends Controller
 
         $transaction->save();
 
-        return redirect(route('dashboard', $transaction->team_id))
+        return redirect(route('dashboard', $teamId))
             ->with('success', 'Your transaction has been updated.');
      }
 
@@ -121,7 +121,7 @@ class TransactionController extends Controller
 
      	$transaction->delete();
 
-        return redirect('/home')
+        return redirect(route('dashboard', $teamId))
             ->with('success', 'That transaction has been deleted.');
      }
 

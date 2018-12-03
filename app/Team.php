@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Auth;
 // use Category;
 // use Transaction;
 
@@ -35,6 +36,12 @@ class Team extends Model
     public function categories()
     {
         return $this->hasMany('Category');
+    }
+
+    public function defaultTeam()
+    {
+        $defaultTeamId = Auth::user()->default_team_id;
+        return $this->id == $defaultTeamId;
     }
 
 

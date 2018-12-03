@@ -7,7 +7,7 @@
                     <select name="timeframe" onchange="this.form.submit()" class="form-control">
                         <option value="mtd" {{ Request::get('timeframe') == 'mtd' ? 'selected' : ''}}>Month To Date</option>
                         <option value="week" {{ Request::get('timeframe') == 'week' ? 'selected' : ''}}>Last 7 Days</option>
-                        <option value="this-year" {{ Request::get('timeframe') == 'this-year' ? 'selected' : ''}}>{{ date('Y') }}</option>
+                        <option value="this-year" {{ Request::get('timeframe') == 'this-year' ? 'selected' : '' }}>{{ date('Y') }}</option>
                         <option value="day" {{ Request::get('timeframe') == 'day' ? 'selected' : ''}}>Today</option>
                     </select>
             </div>

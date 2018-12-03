@@ -32,7 +32,10 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         if (Auth::check()){
+          if(Auth::user()->default_team_id == 0){
             return redirect(route('dashboard', Auth::user()->team->id));
+          }
+          else {return redirect(route('dashboard', Auth::user()->default_team_id));}
         }
       return view('welcome');
   }

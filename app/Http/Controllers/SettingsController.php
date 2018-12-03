@@ -97,21 +97,15 @@ class SettingsController extends Controller
 
     public function team()
     {
-
         $team = Auth::user()->team;
-       $users = $team->users()
+        $users = $team->users()
          ->where('id', '!=', Auth::user()->id)
          ->get();
         
-         $onTeams = Auth::user()->teams->where('user_id', '!=', Auth::user()->id);
-
-         // With the $onTeams, I would like to omit the team where Auth is owner. 
-
-         $invitedUser = Auth::user();
-
+        $onTeams = Auth::user()->teams;
+        $invitedUser = Auth::user();
         $invitesSent = Auth::user()->invites;
-
-            $invitesRecieved = Invite::where('email', Auth::user()->email)->get();
+        $invitesRecieved = Invite::where('email', Auth::user()->email)->get();
 
     	return view('settings.team')
             ->with('users', $users)

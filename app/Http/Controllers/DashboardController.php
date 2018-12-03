@@ -52,7 +52,8 @@ class DashboardController extends Controller
 
         $transactions = $team->transactions()
             ->filter($request->all())
-            ->orderBy('date', 'desc');
+            ->orderBy('id', 'desc');
+         // dd($transactions);   
         $transactionSum = $transactions->sum('amount');
         $transactions = $transactions->paginate(10); 
        $teamsList = Auth::user()->teams->where('user_id', '!=', Auth::user()->id); 

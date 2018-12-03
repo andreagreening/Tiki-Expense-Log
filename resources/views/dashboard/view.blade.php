@@ -24,7 +24,7 @@
                             </div>
                             <ul class="dropdown-menu text-center">
                                 @foreach($teamsList as $teamList)
-                                    <li><a href="{{ route('dashboard', $teamList) }}">{{ $teamList->owner->name }}</a>
+                                    <li><a href="{{ route('dashboard', $teamList) }}">{{ $teamList->name }}</a>
                                     </li>
                                 @endforeach
                                 <li><a href="{{ route('dashboard', Auth::user()->team) }}">My Team</a>
@@ -54,10 +54,24 @@
             </div>
             <div class="panel panel-default border-primary" id="recentTransactions">
                 <div class="panel-heading heading-font">
-                    Recent Transactions
+                    Recent Transactions  <span class="pull-right">
+                    @if(count(Request::except('page')))
+                        <a href="{{ route('dashboard', $team) }}">Clear Filters</a>
+                    @endif
+                    </span>
                     @if(Request::has('startdate'))
                         {{ Request::get('startdate') }} - {{ Request::get('enddate') }}
-                    @endif            
+                    @endif 
+                    <br>
+                    @if(Request::get('category_id') && $team->categories()->where('id', Request::get('category_id'))->first())
+                        <a href="{{ route('dashboard', ['team' => $team->id] + Request::except('category_id')) }}"><span class="label label-default"><i class="fa fa-times-circle"></i> {{ Category::find(Request::get('category_id'))->title  }}</span></a>
+                    @endif   
+
+                    @if(Request::get('user_id') && $team->users->where('id', Request::get('user_id'))->first())
+                        <a href="{{ route('dashboard', ['team' => $team->id] + Request::except('user_id')) }}">
+                            <span class="label label-default"><i class="fa fa-times-circle"></i> {{ User::find(Request::get('user_id'))->name }}</span>
+                        </a>
+                    @endif      
                 </div>
 
                 @if(!$transactions->isEmpty())
