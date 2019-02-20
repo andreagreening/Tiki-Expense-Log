@@ -31,9 +31,24 @@ class Transaction extends Model
 
     public function scopeFilter($builder, $params)
     {
+        // Date Filter Selector
         //  default to mtd
         if(!isset($params['timeframe']))
-            $params['timeframe'] = 'mtd';
+        {
+             if ( isset($params['startdate']) && trim($params['startdate']) !== ''){
+                $startDate = Carbon::parse($params['startdate']);
+                $builder->where('date', '>=', $startDate);   
+            }
+            if ( isset($params['enddate']) && trim($params['enddate']) !== ''){
+                $endDate = Carbon::parse($params['enddate']);
+                // $endDate = Carbon::parse($params->enddate);
+                $builder->where('date', '<=', $endDate);   
+            }
+            if(! isset($params['enddate']) && !isset($params['startdate'])){
+                //  default to MTD
+                $params['timeframe'] = 'mtd';
+            }
+        }
         // determine which timeframe to sort by
         if ( isset($params['timeframe']) && trim($params['timeframe']) !== ''){
             switch ($params['timeframe']) {
@@ -65,17 +80,8 @@ class Transaction extends Model
             $builder->where('date', '>=', $startDate)
             ->where('date', '<=', $endDate);   
         }
-
-        if ( isset($params['startdate']) && trim($params['startdate']) !== ''){
-            $startDate = Carbon::parse($params['startdate']);
-            // $endDate = Carbon::parse($params->enddate);
-            $builder->where('date', '>=', $startDate);   
-        }
-        if ( isset($params['enddate']) && trim($params['enddate']) !== ''){
-            $endDate = Carbon::parse($params['enddate']);
-            // $endDate = Carbon::parse($params->enddate);
-            $builder->where('date', '<=', $endDate);   
-        }
+        // Datepicker Custom
+       
 
         if ( isset($params['user_id']) && !empty(trim($params['user_id'])))
         {

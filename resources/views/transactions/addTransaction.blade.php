@@ -28,7 +28,7 @@
             </div>
             <div class="form-group {{ $errors->has('amount')? 'has-error' : "" }}">
                 <label class="control-label" for="amount">Amount</label>
-                <input type="number" name="amount" class="form-control" value="{{ old('amount') ? old('amount') : "" }}" placeholder="$123.45">
+                <input type="numeric" pattern="[0-9]*" type="text" name="amount" class="form-control" value="{{ old('amount') ? old('amount') : "" }}" placeholder="$123.45">
             </div>
             <div class="form-group {{ $errors->has('category')? 'has-error' : "" }}">
                 <label class="control-label" for="category">Select a Category</label>

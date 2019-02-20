@@ -17,14 +17,14 @@
             <div class="form-group">
                 <label for="datetimepicker1">Start Date</label>
                  <div class='input-group date' id='datetimepicker1'>
-                     <input type='text' class="form-control" name="startdate" value="{{ old('startdate') ? old('startdate') : '' }}" {{ Request::get('datepicker') == 'startdate' }}>
+                     <input type='text' class="form-control" name="startdate" value="{{ Request::get('startdate', '') }}">
                      <span class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                     </span>
                 </div>
                 <label for="datetimepicker2">End Date</label>
             <div class='input-group date' id='datetimepicker2'>
-                 <input type='text' class="form-control" name="enddate" value="{{ old('enddate') ? old('enddate') : '' }}" {{ Request::get('datepicker') == 'enddate' }}>
+                 <input type='text' class="form-control" name="enddate" value="{{ Request::get('enddate', '') }}">
                  <span class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                 </span>
@@ -37,11 +37,19 @@
 </div> {{-- end of panel --}}
 <script type="text/javascript">
 $(function () {
-    $('#datetimepicker1').datetimepicker({format: 'L', maxDate: moment()});
+    $('#datetimepicker1').datetimepicker({
+            format: 'L', maxDate: moment(),
+            useCurrent: false,
+            defaultDate: @if(Request::get('startdate'))moment(new Date({{Request::get('startdate')}}),"MM/DD/YYYY")@else''@endif,
+    });
 });
 </script> 
 <script type="text/javascript">
 $(function () {
-    $('#datetimepicker2').datetimepicker({format: 'L', maxDate: moment()});
+    $('#datetimepicker2').datetimepicker({
+        format: 'L', maxDate: moment(),
+        useCurrent: false,
+            defaultDate: @if(Request::get('enddate'))moment(new Date({{Request::get('enddate')}}),"MM/DD/YYYY")@else''@endif,
+    });
 });
 </script>

@@ -79,11 +79,11 @@
                     <div class="text-center">
                         {!! $transactions->appends(Request::all())->links() !!}
                     </div>
-                    @else
-                        <div class="panel-body">
-                        <h4>There are no transactions yet!</h4>
-                        </div>
-                        @endif
+                @else
+                    <div class="panel-body">
+                    <h4>There are no transactions yet!</h4>
+                    </div>
+                @endif
                         </div>
                     </div>
             </div> {{-- end of panel --}}

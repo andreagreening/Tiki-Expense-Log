@@ -10,18 +10,19 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@welcome')->name('welcome');
+Route::get('/home', 'HomeController@index')->name('home');
 // DEMO
 Route::get('demo', 'HomeController@demo')->name('demo');
 Route::get('demo/register', 'HomeController@registerDemo')->name('registerDemo');
 // 
 Auth::routes();
 Route::get('admin/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-Route::get('/dashboard', function(){
-	return redirect(route('dashboard', Auth::user()->team->id));
-})->name('home');
+// Route::get('/home', function(){
+// 	return redirect(route('dashboard', Auth::user()->team->id));
+// })->name('home');
 Route::get('/profile/{user}', 'HomeController@profile')->name('profile');
+
 
 // TRANSACTIONS
 Route::get('transaction/create', 'TransactionController@create')->name('transaction.create');
@@ -58,7 +59,7 @@ Route::get('team/{team}/view', 'TeamController@view')->name('team.view');
 Route::get('team/remove/{user}', 'TeamController@remove')->name('team.removeUser');
 Route::get('team/{id}/leave', 'TeamController@leave')->name('team.leave');
 Route::get('invite/{id}/delete', 'TeamController@deleteInvite')->name('team.deleteInvite');
-Route::get('team/{teamId}/default', 'TeamController@default')->name('team.default');
+Route::get('team/{id}/default', 'TeamController@default')->name('team.default');
 
 
 // DASHBOARD

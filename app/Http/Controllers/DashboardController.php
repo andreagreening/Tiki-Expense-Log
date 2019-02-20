@@ -12,6 +12,7 @@ use Transaction;
 use Category;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TeamInvite;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -43,17 +44,19 @@ class DashboardController extends Controller
             ->noSubCats() // our new Scope in the Model
             ->orderBy('title', 'desc')->get();
         //  Categories By Id for Chart Labels
-
-        if($request->enddate < $request->startdate)
+        $enddate = New Carbon($request->enddate);
+        $startdate = New Carbon($request->startdate);
+        if($enddate->lessThan($startdate))
         {
             return redirect(route('dashboard', $team))
                 ->with('error', 'Start date must be before end date.');
         }
-
+        $transawctions = $team->transactions()->where('date', '=', $startdate)->get();
         $transactions = $team->transactions()
             ->filter($request->all())
             ->orderBy('id', 'desc');
          // dd($transactions);   
+        // dd($transactions->get());
         $transactionSum = $transactions->sum('amount');
         $transactions = $transactions->paginate(10); 
        $teamsList = Auth::user()->teams->where('user_id', '!=', Auth::user()->id); 

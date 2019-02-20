@@ -40,7 +40,9 @@ class Team extends Model
 
     public function defaultTeam()
     {
+
         $defaultTeamId = Auth::user()->default_team_id;
+        // if($defaultTeamId == 0) return true; 
         return $this->id == $defaultTeamId;
     }
 

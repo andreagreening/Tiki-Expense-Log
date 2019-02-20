@@ -9,6 +9,7 @@ use Transaction;
 use Team;
 use Carbon\Carbon;
 
+
 class CategoryController extends Controller
 {
 	public function store(Request $request, Team $team)

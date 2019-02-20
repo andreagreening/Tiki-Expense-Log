@@ -70,8 +70,9 @@
                                 @endif
 
                             </a>
-                            
-                            <a href="{{ route('team.default', $onTeam->id)}}" class="padding-left-15 padding-right-5">Set Default</a>
+                            @if(!$onTeam->defaultTeam())
+                                <a href="{{ route('team.default', $onTeam->id)}}" class="padding-left-15 padding-right-5">Set Default</a>
+                            @endif
                             <a href="{{ route('team.leave', $onTeam->id) }}" class="custom-info pull-right">Leave Team</a>
                         </div>
                         @endforeach
